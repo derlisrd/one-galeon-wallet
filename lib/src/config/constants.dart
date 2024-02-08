@@ -7,4 +7,6 @@ class Constants {
 
   static const Color backgroundLightColor = Color(0xFFFDFBF6);
   static const Color primaryColor = Color(0xFF000000);
+
+  static const double maxWidth = 480;
 }
