@@ -65,9 +65,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     ]
                 ),
               ),
-              /* SingleChildScrollView(
-                child: ,
-              ) */
+              Flexible(child: 
+                ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: mov.length,
+                      itemBuilder: (BuildContext context, int i) {
+                        return MovimientosView(icono: Icons.payment, value: mov[i].value.toString() , description: mov[i].description);
+                      },
+                    )
+              ),
+              const SizedBox(height: 40,)
             ],
           )
     );

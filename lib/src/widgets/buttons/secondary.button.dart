@@ -27,6 +27,6 @@ class SecondaryButton extends StatelessWidget {
         ),
         child:  Text(text, style: GoogleFonts.poppins( textStyle: const TextStyle(fontSize: 16, color: Colors.black)  )),
       ),
-    );;
+    );
   }
 }
