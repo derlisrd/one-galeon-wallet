@@ -88,8 +88,15 @@ class _LoginScreenState extends State<LoginScreen> {
     
 
     return Scaffold(
-/*       backgroundColor: Constants.backgroundLightColor, */
-      body: context.watch<AuthProvider>().isLoading ? _loadingScreen(context) : SafeArea(
+     /* backgroundColor: Colors.black54, */
+      body: context.watch<AuthProvider>().isLoading ? _loadingScreen(context) : SingleChildScrollView( child:  _formulario() )  ,
+    );
+  }
+
+
+  Widget _formulario (){
+    return (
+      SafeArea(
           child: Center(
             child: Container(
               constraints: const BoxConstraints(
@@ -120,10 +127,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
             ),
           )
-      ) ,
+      )
     );
   }
-
 
   _mostrarAlert(String title, String txt){
     showDialog(context: context,

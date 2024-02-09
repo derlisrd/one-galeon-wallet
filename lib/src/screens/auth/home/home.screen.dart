@@ -65,17 +65,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ]
                 ),
               ),
-              /* CustomScrollView(
-                slivers: [
-                 SliverGrid(
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                    return const MovimientosView(icono: Icons.shop, value: '10', description: "description");
-                  },
-                  childCount: mov.length,
-                  ),
-                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent( maxCrossAxisExtent: 200 ),
-                 )
-                ],
+              /* SingleChildScrollView(
+                child: ,
               ) */
             ],
           )

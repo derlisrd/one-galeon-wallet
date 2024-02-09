@@ -13,6 +13,7 @@ class PrimaryButton extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8,horizontal: 24),
       constraints: const BoxConstraints(
         minWidth: 280,
+        maxWidth: 320
       ),
       child: ElevatedButton(
         onPressed: onTap,
