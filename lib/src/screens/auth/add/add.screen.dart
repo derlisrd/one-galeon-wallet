@@ -13,11 +13,15 @@ class _AddScreenState extends State<AddScreen> {
   
   String categoriasValue = '';
   final categorias = ['Cosas','Tipo','Ingro'];
- 
+  int? tipo = 0;
+
+
  @override
   void initState() {
     super.initState();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +59,34 @@ class _AddScreenState extends State<AddScreen> {
                       });
                     }
                   ),
+            ),
+            Column(children: [
+              ListTile(
+                  title: const Text('Ingreso'),
+                  leading: Radio<int>(
+                    value: 1,
+                    groupValue: tipo,
+                    onChanged: (int? value) {
+                      setState(() {
+                        tipo = value;
+                      });
+                    },
+                  ),
+                ),
+              ListTile(
+                  title: const Text('Egreso'),
+                  leading: Radio<int>(
+                    value: 0,
+                    groupValue: tipo,
+                    onChanged: (int? value) {
+                      setState(() {
+                        tipo = value;
+                      });
+                    },
+                  ),
+                ),
+            ],
+            
             ),
             const FieldPrimary(hintText: 'Descripción',),
             const FieldPrimary(hintText: 'Valor',),
