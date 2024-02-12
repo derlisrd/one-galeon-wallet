@@ -1,5 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'package:onegaleon/src/config/constants.dart';
+import 'package:onegaleon/src/models/cat.response.model.dart';
 import 'package:onegaleon/src/models/login.response.model.dart';
 import 'package:onegaleon/src/models/mov.response.model.dart';
 import 'dart:convert';
@@ -138,6 +139,32 @@ class ApiServices{
       
       Map<String,dynamic> error = {"success": false, "results": []};
       MovResponseModel movE = MovResponseModel.fromJson(error);
+      return movE;
+    }
+  }
+
+
+  Future<CatResponseModel> getCategories(String token) async {
+     try {
+
+      http.Response res = await http.get(
+        Uri.parse('${Constants.apiUrl}/category'),
+        headers:{
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'x-api-key': Constants.xApiKey,
+          'Authorization' : 'Bearer $token'
+        },
+      );
+
+      Map<String,dynamic> json = jsonDecode(res.body);
+      //print(json);
+      CatResponseModel mov = CatResponseModel.fromJson(json);
+      return mov;
+    } catch (e) {
+      
+      Map<String,dynamic> error = {"success": false, "results": []};
+      CatResponseModel movE = CatResponseModel.fromJson(error);
       return movE;
     }
   }
