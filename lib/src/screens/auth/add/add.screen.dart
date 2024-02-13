@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:onegaleon/src/models/cat.response.model.dart';
+import 'package:onegaleon/src/providers/info.providers.dart';
 import 'package:onegaleon/src/widgets/buttons/secondary.button.dart';
 import 'package:onegaleon/src/widgets/index.dart';
+import 'package:provider/provider.dart';
 
 class AddScreen extends StatefulWidget {
   const AddScreen({super.key});
@@ -11,21 +14,26 @@ class AddScreen extends StatefulWidget {
 
 class _AddScreenState extends State<AddScreen> {
   
-  String categoriasValue = '';
-  final categorias = ['Cosas','Tipo','Ingro'];
+  int? categoryId = 0;
   int? tipo = 0;
 
+  TextEditingController desc = TextEditingController();
+  TextEditingController val = TextEditingController();
+  
 
  @override
   void initState() {
     super.initState();
   }
 
+  void _enviar(){
+    
+  }
   
 
   @override
   Widget build(BuildContext context) {
-    
+    List<CatModel> categorias = Provider.of<InfoProviders>(context).categorias;
     void salir(){
       Navigator.pop(context);
     }
@@ -35,65 +43,71 @@ class _AddScreenState extends State<AddScreen> {
     return  Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
-          child: Column(
-            children: [
-              const MontseText('Agregar un movimiento'),
-              Container(
-                constraints: const BoxConstraints(
-                  maxWidth: 480
-                  ),
-                padding: const EdgeInsets.symmetric(horizontal: 18),
-                child: DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        label: const  Text('Categoria'),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6)
-                        )
+          child: GestureDetector(
+            onTap:()=> FocusManager.instance.primaryFocus?.unfocus(),
+            child: Column(
+              children: [
+                const MontseText('Agregar un movimiento'),
+                Container(
+                  constraints: const BoxConstraints(
+                    maxWidth: 480
+                    ),
+                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  child: DropdownButtonFormField(
+                        decoration: InputDecoration(
+                          label: const  Text('Categoria'),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(6)
+                          ),
+                          filled: true,
+                          fillColor: Colors.black,
+                        ),
+                        dropdownColor: Colors.black,
+                        isExpanded: true,
+                        hint: const Text('Seleccionar categoria'),
+                        value: (categoryId==0) ? null : categoryId,
+                        items: categorias.map((op) => DropdownMenuItem(value: op.id, child: Text(op.description))).toList() ,
+                        onChanged: (value){
+                          setState(() {
+                            categoryId = value;
+                          });
+                        }
                       ),
-                      isExpanded: true,
-                      hint: const Text('Seleccionar categoria'),
-                      value: (categoriasValue.isEmpty) ? null : categoriasValue,
-                      items: categorias.map((op) => DropdownMenuItem( value: op, child: Text(op))).toList() ,
-                      onChanged: (value){
-                        setState(() {
-                          categoriasValue = value.toString();
-                        });
-                      }
+                ),
+                Column(children: [
+                  ListTile(
+                      title: const Text('Ingreso'),
+                      leading: Radio<int>(
+                        value: 1,
+                        groupValue: tipo,
+                        onChanged: (int? value) {
+                          setState(() {
+                            tipo = value;
+                          });
+                        },
+                      ),
                     ),
-              ),
-              Column(children: [
-                ListTile(
-                    title: const Text('Ingreso'),
-                    leading: Radio<int>(
-                      value: 1,
-                      groupValue: tipo,
-                      onChanged: (int? value) {
-                        setState(() {
-                          tipo = value;
-                        });
-                      },
+                  ListTile(
+                      title: const Text('Egreso'),
+                      leading: Radio<int>(
+                        value: 0,
+                        groupValue: tipo,
+                        onChanged: (int? value) {
+                          setState(() {
+                            tipo = value;
+                          });
+                        },
+                      ),
                     ),
-                  ),
-                ListTile(
-                    title: const Text('Egreso'),
-                    leading: Radio<int>(
-                      value: 0,
-                      groupValue: tipo,
-                      onChanged: (int? value) {
-                        setState(() {
-                          tipo = value;
-                        });
-                      },
-                    ),
-                  ),
+                ],
+                
+                ),
+                FieldPrimary(hintText: 'Descripción', controller: desc,),
+                FieldPrimaryNum(hintText: 'Valor',controller: val,),
+                PrimaryButton(text: 'Agregar',onTap: _enviar,),
+                SecondaryButton(text: 'Cancelar',onTap: salir)
               ],
-              
-              ),
-              const FieldPrimary(hintText: 'Descripción',),
-              const FieldPrimary(hintText: 'Valor',),
-              const PrimaryButton(text: 'Agregar'),
-              SecondaryButton(text: 'Cancelar',onTap: salir)
-            ],
+            ),
           ),
         ),
       ),

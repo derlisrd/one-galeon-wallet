@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
     
     
     return SafeArea(
-        child: Column(
+        child: loadingBalance ? _loading(context) : Column(
             children: [
               Text(email),
               CustomCard(
@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Column(crossAxisAlignment: CrossAxisAlignment.start, 
                     children: [
                       const MontseText('Balance'),
-                      TitlePrimary(loadingBalance ? '...' : balance),
+                      TitlePrimary( balance),
                     ]
                 ),
               ),
@@ -94,4 +94,12 @@ class _HomeScreenState extends State<HomeScreen> {
           )
     );
   }
+
+
+  Widget _loading(BuildContext context){
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
 }
