@@ -33,66 +33,68 @@ class _AddScreenState extends State<AddScreen> {
  
 
     return  Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            const MontseText('Agregar un movimiento'),
-            Container(
-              constraints: const BoxConstraints(
-                maxWidth: 480
-                ),
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-              child: DropdownButtonFormField(
-                    decoration: InputDecoration(
-                      label: const  Text('Categoria'),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6)
-                      )
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Column(
+            children: [
+              const MontseText('Agregar un movimiento'),
+              Container(
+                constraints: const BoxConstraints(
+                  maxWidth: 480
+                  ),
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: DropdownButtonFormField(
+                      decoration: InputDecoration(
+                        label: const  Text('Categoria'),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(6)
+                        )
+                      ),
+                      isExpanded: true,
+                      hint: const Text('Seleccionar categoria'),
+                      value: (categoriasValue.isEmpty) ? null : categoriasValue,
+                      items: categorias.map((op) => DropdownMenuItem( value: op, child: Text(op))).toList() ,
+                      onChanged: (value){
+                        setState(() {
+                          categoriasValue = value.toString();
+                        });
+                      }
                     ),
-                    isExpanded: true,
-                    hint: const Text('Seleccionar categoria'),
-                    value: (categoriasValue.isEmpty) ? null : categoriasValue,
-                    items: categorias.map((op) => DropdownMenuItem( value: op, child: Text(op))).toList() ,
-                    onChanged: (value){
-                      setState(() {
-                        categoriasValue = value.toString();
-                      });
-                    }
+              ),
+              Column(children: [
+                ListTile(
+                    title: const Text('Ingreso'),
+                    leading: Radio<int>(
+                      value: 1,
+                      groupValue: tipo,
+                      onChanged: (int? value) {
+                        setState(() {
+                          tipo = value;
+                        });
+                      },
+                    ),
                   ),
-            ),
-            Column(children: [
-              ListTile(
-                  title: const Text('Ingreso'),
-                  leading: Radio<int>(
-                    value: 1,
-                    groupValue: tipo,
-                    onChanged: (int? value) {
-                      setState(() {
-                        tipo = value;
-                      });
-                    },
+                ListTile(
+                    title: const Text('Egreso'),
+                    leading: Radio<int>(
+                      value: 0,
+                      groupValue: tipo,
+                      onChanged: (int? value) {
+                        setState(() {
+                          tipo = value;
+                        });
+                      },
+                    ),
                   ),
-                ),
-              ListTile(
-                  title: const Text('Egreso'),
-                  leading: Radio<int>(
-                    value: 0,
-                    groupValue: tipo,
-                    onChanged: (int? value) {
-                      setState(() {
-                        tipo = value;
-                      });
-                    },
-                  ),
-                ),
+              ],
+              
+              ),
+              const FieldPrimary(hintText: 'Descripción',),
+              const FieldPrimary(hintText: 'Valor',),
+              const PrimaryButton(text: 'Agregar'),
+              SecondaryButton(text: 'Cancelar',onTap: salir)
             ],
-            
-            ),
-            const FieldPrimary(hintText: 'Descripción',),
-            const FieldPrimary(hintText: 'Valor',),
-            const PrimaryButton(text: 'Agregar'),
-            SecondaryButton(text: 'Cancelar',onTap: salir)
-          ],
+          ),
         ),
       ),
     );

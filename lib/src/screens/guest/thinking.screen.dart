@@ -36,9 +36,11 @@ class _ThinkingScreenState extends State<ThinkingScreen> {
         context.read<AuthProvider>().setIsAuth(true);
         context.read<AuthProvider>().setUser(res.results);
       });
+    if (context.mounted) Navigator.pushReplacementNamed(context, 'authmain');
+    }else{
+      if (context.mounted) Navigator.pushReplacementNamed(context, 'login');
     }
 
-    if (context.mounted) Navigator.pushReplacementNamed(context, 'authmain');
    }
 
 
