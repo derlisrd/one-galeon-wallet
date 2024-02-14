@@ -6,7 +6,7 @@ import 'package:onegaleon/src/config/constants.dart';
 
 class ApiMovimientos {
 
-  void store(Map<String,dynamic> body, String token)async{
+  Future<void> store(Map<String,dynamic> body, String token)async{
     try {
 
       http.Response res = await http.post(

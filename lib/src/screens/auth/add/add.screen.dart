@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:onegaleon/src/models/cat.response.model.dart';
+import 'package:onegaleon/src/providers/auth.provider.dart';
 import 'package:onegaleon/src/providers/info.providers.dart';
+import 'package:onegaleon/src/services/api.movimientos.dart';
 import 'package:onegaleon/src/widgets/buttons/secondary.button.dart';
 import 'package:onegaleon/src/widgets/index.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +18,7 @@ class _AddScreenState extends State<AddScreen> {
   
   int? categoryId = 0;
   int? tipo = 0;
-
+  bool loading = false;
   TextEditingController desc = TextEditingController();
   TextEditingController val = TextEditingController();
   
@@ -26,8 +28,15 @@ class _AddScreenState extends State<AddScreen> {
     super.initState();
   }
 
-  void _enviar(){
-    
+  Future<void> _enviar()async{
+    String token = Provider.of<AuthProvider>(context).user.token;
+    Map<String,dynamic> body = {
+      'category_id': categoryId,
+      'tipo': tipo,
+      'description': desc.text,
+      'value': val.text
+    };
+    var res = await ApiMovimientos().store(body, token);
   }
   
 
