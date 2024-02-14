@@ -2,11 +2,12 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:onegaleon/src/config/constants.dart';
+import 'package:onegaleon/src/models/mov.response.model.dart';
 
 
 class ApiMovimientos {
 
-  Future<void> store(Map<String,dynamic> body, String token)async{
+  Future<MovStoreResponse> store(Map<String,dynamic> body, String token)async{
     try {
 
       http.Response res = await http.post(
@@ -21,12 +22,12 @@ class ApiMovimientos {
       );
       //print(res.body);
       Map<String,dynamic> json = jsonDecode(res.body);
-      print(json); 
-      
+      MovStoreResponse result = MovStoreResponse.fromJson(json);
+      return result;
     } catch (e) {
-      //Map<String,dynamic> error = {"success": false, "message": e.toString()};
       print(e.toString());
-      //return loginResponseError;
+      Map<String,dynamic> error = {"success": false, "results": {}};
+      return MovStoreResponse.fromJson(error);
     }
   }
 

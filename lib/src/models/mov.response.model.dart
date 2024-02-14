@@ -6,12 +6,12 @@ class MovResponseModel {
 
   MovResponseModel({required this.success, required this.results});
 
-  Map<String, dynamic> toMap() {
+  /* Map<String, dynamic> toMap() {
     return {
       "success": success,
       "results": results.map((result) => result.toJson()).toList(),
     };
-  }
+  } */
 
  //*  ACA DEBES CAMBIAR EL MODELO *//
   factory MovResponseModel.fromJson(Map<String, dynamic> json) {
@@ -22,6 +22,8 @@ class MovResponseModel {
   }
 
 }
+
+
 
 class MovModel{
 
@@ -53,4 +55,30 @@ class MovModel{
         'value': value,
         'tipo': tipo,
   };
+}
+
+
+class MovStoreResponse {
+  bool success;
+  MovModel results;
+  String? message;
+  
+  MovStoreResponse({required this.success, required this.results, this.message});
+
+  factory MovStoreResponse.fromJson(Map<String,dynamic> objeto){
+    var json = objeto['results'];
+
+
+    return MovStoreResponse(
+      success: objeto['success'] ?? false, message: objeto['message'] ?? '', 
+      results: MovModel(
+        id: (json['id']) ?? 0,
+        value: int.parse(json['value'] ?? "0"),
+        tipo: (json['tipo']) ?? 0,
+        categoryId: (json['category_id']) ?? 0,
+        description : json['description'] ?? '',
+        fecha: json['created_at'] ?? '',
+      )
+    );
+  }
 }

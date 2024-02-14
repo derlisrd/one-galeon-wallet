@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:onegaleon/src/providers/auth.provider.dart';
 import 'package:onegaleon/src/services/api.services.dart';
 import 'package:onegaleon/src/widgets/index.dart';
-import 'package:intl/intl.dart';
+//import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,10 +18,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-
-  String balance = '0';
   bool loadingBalance = true;
-  
+  List<MovModel> newmov = [];
+  List<CatModel> newCat = [];
+
   @override
   void initState() {
     super.initState();
@@ -29,33 +29,24 @@ class _HomeScreenState extends State<HomeScreen> {
     _getInfo(token);
   }
 
+
   
 
   void _getInfo (token)async{
     var res = await ApiServices().getMovements(token);
     var cat = await ApiServices().getCategories(token);
-    int nuevoBalance = 0;
-    List<MovModel> newmov = [];
-    List<CatModel> newCat = [];
     
     if(cat.success){
       newCat = cat.results  ;
     }
     if(res.success){
       newmov = res.results;
-      for (var el in res.results) {
-        if(el.tipo == 0){
-          nuevoBalance -= el.value;
-        }else{
-          nuevoBalance += el.value;
-        }
-      }
     }
     setState(() {
       Provider.of<InfoProviders>(context, listen: false).setCategorias(newCat);
-      Provider.of<InfoProviders>(context, listen: false).setMovimientos(newmov);
-      var f = NumberFormat ("#,##0", "de_DE");
-      balance = f.format(nuevoBalance);
+      Provider.of<InfoProviders>(context, listen: false).setMovimientosConBalance(newmov);
+      //var f = NumberFormat ("#,##0", "de_DE");
+      //balance = f.format(nuevoBalance);
       loadingBalance = false;
     });
   }
@@ -65,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     var mov = Provider.of<InfoProviders>(context).movimientos;
     String email = Provider.of<AuthProvider>(context).user.email;
+    int balance = Provider.of<InfoProviders>(context).balance;
     
     
     return SafeArea(
@@ -76,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Column(crossAxisAlignment: CrossAxisAlignment.start, 
                     children: [
                       const MontseText('Balance'),
-                      TitlePrimary( balance),
+                      TitlePrimary( balance.toString()),
                     ]
                 ),
               ),

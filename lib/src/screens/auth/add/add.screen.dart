@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onegaleon/src/models/cat.response.model.dart';
+import 'package:onegaleon/src/models/mov.response.model.dart';
 import 'package:onegaleon/src/providers/auth.provider.dart';
 import 'package:onegaleon/src/providers/info.providers.dart';
 import 'package:onegaleon/src/services/api.movimientos.dart';
@@ -28,31 +29,47 @@ class _AddScreenState extends State<AddScreen> {
     super.initState();
   }
 
-  Future<void> _enviar()async{
-    String token = Provider.of<AuthProvider>(context).user.token;
-    Map<String,dynamic> body = {
-      'category_id': categoryId,
-      'tipo': tipo,
-      'description': desc.text,
-      'value': val.text
-    };
-    var res = await ApiMovimientos().store(body, token);
-  }
+  
   
 
   @override
   Widget build(BuildContext context) {
+    
     List<CatModel> categorias = Provider.of<InfoProviders>(context).categorias;
-    void salir(){
-      Navigator.pop(context);
-    }
+    
+    void salir()=>Navigator.pop(context);
+    
 
+    Future<void> enviar()async{
+      String token = Provider.of<AuthProvider>(context, listen: false).user.token;
+      List<MovModel> movimientosActuales =  Provider.of<InfoProviders>(context,listen: false).movimientos;
+      Map<String,dynamic> body = {
+        'category_id': categoryId,
+        'tipo': tipo,
+        'description': desc.text,
+        'value': val.text
+      };
+      if(desc.text.isEmpty) return;
+      
+      if(val.text.isEmpty || int.parse(val.text) < 0) return;
+      
+
+      setState(()=>loading = true);
+      var res = await ApiMovimientos().store(body, token);
+      setState(()=>loading = false);
+      if(res.success){
+        MovModel valornuevo =  res.results ;
+        movimientosActuales.add(valornuevo);
+        setState(() =>Provider.of<InfoProviders>(context, listen: false).setMovimientosConBalance(movimientosActuales));
+      }
+      if(context.mounted) Navigator.pop(context);
+    }
  
 
     return  Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
-          child: GestureDetector(
+          child: loading ? _loading(context) : GestureDetector(
             onTap:()=> FocusManager.instance.primaryFocus?.unfocus(),
             child: Column(
               children: [
@@ -113,13 +130,21 @@ class _AddScreenState extends State<AddScreen> {
                 ),
                 FieldPrimary(hintText: 'Descripción', controller: desc,),
                 FieldPrimaryNum(hintText: 'Valor',controller: val,),
-                PrimaryButton(text: 'Agregar',onTap: _enviar,),
+                PrimaryButton(text: 'Agregar',onTap: enviar,),
                 SecondaryButton(text: 'Cancelar',onTap: salir)
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+
+
+  Widget _loading(BuildContext context){
+    return const Center(
+      child: CircularProgressIndicator(),
     );
   }
 }
